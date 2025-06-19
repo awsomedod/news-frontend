@@ -7,7 +7,7 @@ interface ConfigProps {
   onConfigComplete: () => void;
 }
 
-const GoogleModels = ['gemini-2.0-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash-preview-05-20'];
+const GoogleModels = ['gemini-2.0-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash-preview-05-20', 'gemini-1.5-flash'];
 const AnthropicModels = ['claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022', 'claude-3-opus-20240229'];
 const OpenAIModels = ['gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo'];
 const MockModels = ['mock-model'];
@@ -119,9 +119,9 @@ const Config: React.FC<ConfigProps> = ({ onConfigComplete }) => {
                 required
                 disabled={isLoading}
               />
-              <small>
+              {/* <small>
                 Your API key will be stored locally and used only for this session.
-              </small>
+              </small> */}
             </div>
           )}
 

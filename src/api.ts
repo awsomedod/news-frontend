@@ -24,9 +24,17 @@ export interface NewsSummaryRequest {
   sources: string[];
 }
 
+export interface NewsSummaryResponseItem {
+  id: number;
+  title: string;
+  summary: string;
+  image: string;
+}
+
+
 export interface NewsSummaryResponse {
   success: boolean;
-  summary?: string;
+  summary?: NewsSummaryResponseItem;
   error?: string;
 }
 
@@ -75,7 +83,7 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
 
     if (!response.ok) {

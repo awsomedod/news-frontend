@@ -55,7 +55,7 @@ function Sources() {
       {sources.map((source) => {
         return(
           <Source
-            key={source.name}
+            key={source.id}
             name={source.name}
             url={source.url}
             description={source.description}
