@@ -1,0 +1,13 @@
+.news-container {
+  flex: 0 0 80%;
+  padding: 20px;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stories-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+} 

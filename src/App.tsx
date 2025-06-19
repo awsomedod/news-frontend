@@ -1,24 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import News from './components/News';
+import Sources from './components/Sources';
+import Config from './components/Config';
+import { LLMConfig } from './types';
+// import { LLMProvider } from './ai/LLMContext';
 
 function App() {
+  const [isConfigured, setIsConfigured] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Check if we have a stored config
+    const storedConfig = localStorage.getItem('llmConfig');
+    if (storedConfig) {
+      setIsConfigured(true);
+    }
+  }, []);
+
+  const handleConfigComplete = () => {
+    setIsConfigured(true);
+  };
+
+  const handleResetConfig = () => {
+    localStorage.removeItem('llmConfig');
+    setIsConfigured(false);
+  };
+
+  // Show configuration if not yet configured
+  if (!isConfigured) {
+    return <Config onConfigComplete={handleConfigComplete} />;
+  }
+
+  // Show main app content after configuration
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className="header">
+        <h1>News AI</h1>
+        <button 
+          onClick={handleResetConfig}
+          className="reset-config-btn"
+          title="Reset LLM Configuration"
         >
-          Learn React
-        </a>
-      </header>
+          ⚙️ Reset Config
+        </button>
+      </div>
+      <div className="main-content">
+        <Sources />
+        <News />
+      </div>
     </div>
   );
 }
