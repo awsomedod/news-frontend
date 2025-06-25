@@ -3,31 +3,9 @@ import Summary from './Summary';
 import Story from './Story';
 import RefreshButton from './RefreshButton';
 import { useEffect, useState } from 'react';
-import { apiService, NewsSummaryResponse, NewsSummaryRequest, NewsSummaryResponseItem } from '../api';
+import { apiService, NewsSummaryResponse, NewsSummaryRequest, NewsSummaryResponseItem, NewsSummaryStreamItem } from '../api';
 import { getSources } from '../databaselol/Sources';
 import { Source } from '../api';
-
-async function getNews(): Promise<NewsSummaryResponseItem[]> {
-  const sources: Source[] = getSources().map(source => ({
-    name: source.name,
-    url: source.url,
-    description: source.description || '',
-    category: source.category || ''
-  }));
-  const request: NewsSummaryRequest = {
-    sources: sources.map(source => source.url)
-  };
-  const response = await apiService.getNewsSummary(request);
-  const responseJson: {success: boolean, summary: NewsSummaryResponseItem[]} = JSON.parse(response);
-  const news = responseJson.summary;
-  if (!news) {
-    return [];
-  }
-  console.log(news);
-
-
-  return news;
-}
 
 function News() {
   const summaryText = "Today's top headlines cover breaking news from around the world, featuring major developments in technology, politics, and global events.";
@@ -37,6 +15,7 @@ function News() {
 
   const handleRefreshNews = async () => {
     setIsLoading(true);
+    setStories([]); // Clear existing stories
 
     if (getSources().length === 0) {
       setIsLoading(false);
@@ -44,8 +23,37 @@ function News() {
     }
 
     try {
-      const newsData = await getNews();
-      setStories(newsData);
+      const sources: Source[] = getSources().map(source => ({
+        name: source.name,
+        url: source.url,
+        description: source.description || '',
+        category: source.category || ''
+      }));
+      
+      const request: NewsSummaryRequest = {
+        sources: sources.map(source => source.url)
+      };
+
+      // Use the streaming API
+      await apiService.getNewsSummaryStream(request, (summary: NewsSummaryStreamItem) => {
+        // Add each summary as it arrives
+        if (summary.id && summary.title && summary.summary) {
+          setStories(prevStories => {
+            // Check if story already exists to avoid duplicates
+            const exists = prevStories.some(story => story.id === summary.id);
+            if (!exists) {
+              const newStory: NewsSummaryResponseItem = {
+                id: summary.id!,
+                title: summary.title!,
+                summary: summary.summary!,
+                image: summary.image || ''
+              };
+              return [...prevStories, newStory];
+            }
+            return prevStories;
+          });
+        }
+      });
     } catch (error) {
       console.error('Error fetching news:', error);
     } finally {

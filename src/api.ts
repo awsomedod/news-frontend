@@ -31,11 +31,17 @@ export interface NewsSummaryResponseItem {
   image: string;
 }
 
-
 export interface NewsSummaryResponse {
   success: boolean;
   summary?: NewsSummaryResponseItem;
   error?: string;
+}
+
+export interface NewsSummaryStreamItem {
+  id?: number;
+  title?: string;
+  summary?: string;
+  image?: string;
 }
 
 export interface InitLLMResponse {
@@ -92,6 +98,58 @@ class ApiService {
     }
 
     return response.text();
+  }
+
+  async getNewsSummaryStream(
+    request: NewsSummaryRequest, 
+    onSummaryReceived: (summary: NewsSummaryStreamItem) => void
+  ): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/api/news-summary`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to get news summary');
+    }
+
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error('No response body available');
+    }
+
+    const decoder = new TextDecoder();
+    
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) {
+          break;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        
+        for (const line of lines) {
+          if (line.trim() && line.startsWith('data: ')) {
+            try {
+              const data = line.slice(6); // Remove 'data: ' prefix
+              const summary = JSON.parse(data);
+              onSummaryReceived(summary);
+            } catch (parseError) {
+              console.error('Error parsing SSE data:', parseError);
+            }
+          }
+        }
+      }
+    } finally {
+      reader.releaseLock();
+    }
   }
 }
 
