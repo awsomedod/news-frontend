@@ -139,38 +139,6 @@ data: {"id": 1, "title": "Headline", "summary": "Summary text...", "image": "ima
 - **API Key**: Required
 - **Base URL**: `https://generativelanguage.googleapis.com`
 
-### Anthropic (Claude)
-- **Models**: `claude-3-5-sonnet-20241022`, `claude-3-5-haiku-20241022`, `claude-3-opus-20240229`
-- **API Key**: Required
-- **Base URL**: `https://api.anthropic.com`
-
-### OpenAI (GPT)
-- **Models**: `gpt-4o`, `gpt-4o-mini`, `gpt-3.5-turbo`
-- **API Key**: Required
-- **Base URL**: `https://api.openai.com`
-
-### Mock Provider
-- **Models**: `mock-model`
-- **API Key**: Not required
-- **Purpose**: For testing and development
-
-## Error Handling
-
-The frontend expects consistent error responses across all endpoints:
-
-```json
-{
-  "success": false,
-  "error": "Human-readable error message"
-}
-```
-
-Common error scenarios to handle:
-- Invalid API keys
-- Network connectivity issues
-- Rate limiting
-- Invalid request parameters
-- LLM service unavailability
 
 ## CORS Configuration
 
@@ -184,49 +152,9 @@ app.use(cors({
 }));
 ```
 
-## Security Considerations
-
-1. **API Key Storage**: API keys should be stored securely on the backend, not in the frontend
-2. **Request Validation**: Validate all incoming requests for required fields and data types
-3. **Rate Limiting**: Implement appropriate rate limiting for API endpoints
-4. **Error Messages**: Avoid exposing sensitive information in error messages
-
-## Testing
-
-The frontend includes a mock provider for testing purposes. When using the mock provider:
-- No API key is required
-- The backend should return mock data
-- All endpoints should work without external API calls
-
 ## Development Setup
 
 1. Start the backend server on `http://localhost:3001`
 2. Set the `REACT_APP_API_URL` environment variable if using a different URL
 3. Configure an LLM provider through the frontend interface
 4. Test the integration by adding sources and fetching news
-
-## Troubleshooting
-
-### Common Issues
-
-1. **CORS Errors**: Ensure the backend allows requests from the frontend origin
-2. **Network Errors**: Check that the backend is running and accessible
-3. **API Key Issues**: Verify that the API key is valid and has the necessary permissions
-4. **Streaming Issues**: Ensure the backend properly implements Server-Sent Events
-
-### Debug Information
-
-The frontend logs detailed error information to the console for debugging:
-- Network request failures
-- API response parsing errors
-- Configuration issues
-
-## Future Enhancements
-
-Potential API enhancements:
-- Authentication and user management
-- Source categorization and filtering
-- News article archiving
-- User preferences and settings
-- Real-time notifications
-- Multi-language support 
