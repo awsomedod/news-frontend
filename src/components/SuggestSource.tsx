@@ -7,18 +7,34 @@ import { SuggestSourcesResponse } from '../api';
 // import { suggestNewsSources } from '../ai/agent';
 // import { Sources } from '../ai/types';
 
+/**
+ * Props interface for the SuggestSource component.
+ */
 interface SuggestSourceProps {
+  /** Callback function called when sources are selected and confirmed */
   onSuggestSources: (sources: any[]) => void;
+  /** Callback function called when the modal is cancelled */
   onCancel: () => void;
 }
 
+/**
+ * Interface representing a suggested news source.
+ */
 interface Source {
+  /** Display name of the source */
   name: string;
+  /** URL of the source's RSS feed or website */
   url: string;
+  /** Brief description of the source */
   description: string;
+  /** Category or type of news the source covers */
   category: string;
 }
 
+/**
+ * Component for getting AI-suggested news sources based on a topic.
+ * Provides a two-step process: first enter a topic, then select from suggested sources.
+ */
 function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
   const [topic, setTopic] = useState('');
   const [suggestedSources, setSuggestedSources] = useState<Source[]>([]);
@@ -28,6 +44,11 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
   const [error, setError] = useState<string | null>(null);
   
 
+  /**
+   * Handles form submission to get AI-suggested sources for a topic.
+   * Validates the response and displays the suggestions for selection.
+   * @param e - The form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (topic.trim()) {
@@ -35,13 +56,15 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
       setError(null);
       
       try {
-        // Call the actual suggestNewsSources function
-        const suggestions: SuggestSourcesResponse = await apiService.suggestSources({ topic: topic, bias: 'neutral' });
-        console.log(suggestions);
+        // Request AI-suggested sources from the backend
+        const suggestions: SuggestSourcesResponse = await apiService.suggestSources({ 
+          topic: topic, 
+          bias: 'neutral' 
+        });
         
         const srcs = suggestions.sources;
         
-        // Verify the parsed data matches the Source interface
+        // Validate the response format
         if (!srcs || !Array.isArray(srcs)) {
           throw new Error('Invalid response format: expected sources array');
         }
@@ -53,7 +76,7 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
           }
         });
 
-        // Convert URLs to Source objects
+        // Convert response to Source objects
         const sources: Source[] = srcs.map((source: { name: string; url: string; description: string; category: string; }) => ({
           name: source.name,
           url: source.url,
@@ -71,6 +94,10 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
     }
   };
 
+  /**
+   * Toggles the selection state of a source in the suggestions list.
+   * @param sourceName - The name of the source to toggle
+   */
   const handleSourceToggle = (sourceName: string) => {
     const newSelected = new Set(selectedSources);
     if (newSelected.has(sourceName)) {
@@ -81,6 +108,9 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
     setSelectedSources(newSelected);
   };
 
+  /**
+   * Confirms the selection of sources and calls the callback with selected sources.
+   */
   const handleConfirmSelection = () => {
     const selectedSourcesList = suggestedSources.filter(source => 
       selectedSources.has(source.name)
@@ -88,6 +118,9 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
     onSuggestSources(selectedSourcesList);
   };
 
+  /**
+   * Returns to the topic input form, clearing all suggestions and selections.
+   */
   const handleBackToForm = () => {
     setShowSuggestions(false);
     setSelectedSources(new Set());
@@ -95,6 +128,7 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
     setError(null);
   };
 
+  // Render the source selection view
   if (showSuggestions) {
     return (
       <div className="add-source-overlay">
@@ -153,6 +187,7 @@ function SuggestSource({ onSuggestSources, onCancel }: SuggestSourceProps) {
     );
   }
 
+  // Render the topic input form
   return (
     <div className="add-source-overlay">
       <div className="add-source-modal">

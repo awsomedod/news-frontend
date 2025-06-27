@@ -1,13 +1,26 @@
 import './style/source.css';
 
+/**
+ * Props interface for the Source component.
+ */
 interface SourceProps {
+  /** Display name of the news source */
   name: string;
+  /** URL of the news source */
   url: string;
+  /** Optional description of the source */
   description?: string;
+  /** Optional category of the source */
   category?: string;
+  /** Callback function called when the source is deleted */
   onDelete: () => void;
 }
 
+/**
+ * Component for displaying individual news sources.
+ * Shows source information including name, description, category, and provides
+ * a link to visit the source and an option to remove it.
+ */
 function Source({ 
   name, 
   description, 

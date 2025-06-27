@@ -1,12 +1,22 @@
 import './style/button.css';
 import './style/refreshButton.css';
 
+/**
+ * Props interface for the RefreshButton component.
+ */
 interface RefreshButtonProps {
+  /** Callback function called when the button is clicked */
   onClick: () => void;
+  /** Whether the button is in a loading state (shows spinner and disables button) */
   isLoading?: boolean;
+  /** Whether the button is disabled */
   disabled?: boolean;
 }
 
+/**
+ * Refresh button component with loading state and spinner animation.
+ * Used for refreshing news content and other data that requires loading states.
+ */
 function RefreshButton({ onClick, isLoading = false, disabled = false }: RefreshButtonProps) {
   return (
     <button

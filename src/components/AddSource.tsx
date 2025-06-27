@@ -1,31 +1,62 @@
 import './style/addSource.css';
 import { useState } from 'react';
 
+/**
+ * Props interface for the AddSource component.
+ */
 interface AddSourceProps {
+  /** Callback function called when a new source is successfully added */
   onAddSource: (source: {
     name: string;
     url: string;
     description?: string;
     category?: string;
   }) => void;
+  /** Callback function called when the modal is cancelled */
   onCancel: () => void;
 }
 
+/**
+ * Form data interface for the add source form.
+ */
+interface FormData {
+  name: string;
+  url: string;
+  description: string;
+  category: string;
+}
+
+/**
+ * Error state interface for form validation.
+ */
+interface FormErrors {
+  name: string;
+  url: string;
+}
+
+/**
+ * Component for manually adding new news sources.
+ * Provides a form with validation for adding sources with name, URL, description, and category.
+ */
 function AddSource({ onAddSource, onCancel }: AddSourceProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     url: '',
     description: '',
     category: ''
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<FormErrors>({
     name: '',
     url: ''
   });
 
-  const validateForm = () => {
-    const newErrors = {
+  /**
+   * Validates the form data and sets error messages.
+   * @returns True if the form is valid, false otherwise
+   */
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {
       name: '',
       url: ''
     };
@@ -44,7 +75,12 @@ function AddSource({ onAddSource, onCancel }: AddSourceProps) {
     return !newErrors.name && !newErrors.url;
   };
 
-  const isValidUrl = (url: string) => {
+  /**
+   * Validates if a string is a valid URL.
+   * @param url - The URL string to validate
+   * @returns True if the URL is valid, false otherwise
+   */
+  const isValidUrl = (url: string): boolean => {
     try {
       new URL(url);
       return true;
@@ -53,6 +89,10 @@ function AddSource({ onAddSource, onCancel }: AddSourceProps) {
     }
   };
 
+  /**
+   * Handles form submission and adds the new source if validation passes.
+   * @param e - The form submission event
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -76,6 +116,10 @@ function AddSource({ onAddSource, onCancel }: AddSourceProps) {
     }
   };
 
+  /**
+   * Handles input changes and clears validation errors when user starts typing.
+   * @param e - The input change event
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -84,7 +128,7 @@ function AddSource({ onAddSource, onCancel }: AddSourceProps) {
     }));
     
     // Clear error when user starts typing
-    if (errors[name as keyof typeof errors]) {
+    if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''

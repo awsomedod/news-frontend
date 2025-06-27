@@ -1,46 +1,142 @@
-# Getting Started with Create React App
+# News AI Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React TypeScript application that provides an intelligent news aggregation and summarization interface using various LLM providers.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **LLM Configuration**: Support for multiple AI providers (Google Gemini, Anthropic Claude, OpenAI GPT, and Mock for testing)
+- **Source Management**: Add, remove, and get AI-suggested news sources
+- **News Summarization**: Real-time news summaries using configured LLM providers
+- **Streaming Updates**: Live streaming of news summaries as they're generated
+- **Responsive Design**: Modern, clean UI with responsive layout
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Frontend**: React 19.1.0 with TypeScript
+- **Styling**: CSS modules with custom styling
+- **HTTP Client**: Axios for API requests
+- **State Management**: React hooks (useState, useEffect)
+- **Build Tool**: Create React App with webpack configuration
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+```
+src/
+├── components/          # React components
+│   ├── style/          # CSS files for components
+│   ├── AddSource.tsx   # Manual source addition form
+│   ├── AddSourceButton.tsx # Reusable button component
+│   ├── Config.tsx      # LLM provider configuration
+│   ├── News.tsx        # Main news display component
+│   ├── RefreshButton.tsx # News refresh functionality
+│   ├── Source.tsx      # Individual source display
+│   ├── Sources.tsx     # Source management container
+│   ├── Story.tsx       # Individual news story display
+│   ├── SuggestSource.tsx # AI-powered source suggestions
+│   └── Summary.tsx     # News summary display
+├── databaselol/        # Simple in-memory data storage
+│   ├── Config.tsx      # Configuration storage
+│   └── Sources.tsx     # Source data management
+├── api.ts              # API service layer
+├── types.tsx           # TypeScript type definitions
+├── App.tsx             # Main application component
+└── index.tsx           # Application entry point
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup and Installation
 
-### `npm run build`
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd news-frontend
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. **Configure environment variables**
+   Create a `.env` file in the root directory:
+   ```env
+   REACT_APP_API_URL=http://localhost:3001
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. **Start the development server**
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+5. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Configuration
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### LLM Provider Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The application supports multiple LLM providers:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **Mock**: For testing (no API key required)
+- **Google (Gemini)**: Requires Google AI API key
+- **Anthropic (Claude)**: Requires Anthropic API key
+- **OpenAI (GPT)**: Requires OpenAI API key
 
-## Learn More
+### API Configuration
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The frontend expects a backend API running on `http://localhost:3001` by default. The backend should provide the following endpoints:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `POST /api/init-llm` - Initialize LLM configuration
+- `POST /api/suggest-sources` - Get AI-suggested news sources
+- `POST /api/news-summary` - Fetch and summarize news
+
+## Usage
+
+1. **Initial Setup**: Configure your preferred LLM provider with appropriate API keys
+2. **Add Sources**: Manually add news sources or use AI suggestions
+3. **View News**: Click the refresh button to fetch and display news summaries
+4. **Manage Sources**: Add or remove sources as needed
+
+## Development
+
+### Code Style
+
+- Use TypeScript for all new code
+- Follow React functional component patterns
+- Use CSS modules for styling
+- Implement proper error handling
+- Add JSDoc comments for complex functions
+
+### Adding New Features
+
+1. Create new components in the `src/components/` directory
+2. Add corresponding CSS files in `src/components/style/`
+3. Update types in `src/types.tsx` if needed
+4. Add API methods in `src/api.ts` for backend communication
+
+## Dependencies
+
+### Core Dependencies
+- `react`: ^19.1.0
+- `react-dom`: ^19.1.0
+- `typescript`: ^4.9.5
+- `axios`: ^1.10.0
+
+### Development Dependencies
+- `@types/react`: ^19.1.8
+- `@types/react-dom`: ^19.1.6
+- `react-scripts`: 5.0.1
+- Various webpack polyfills for browser compatibility
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+[Add your license information here]
