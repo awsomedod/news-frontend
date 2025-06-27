@@ -110,8 +110,8 @@ const Config: React.FC<ConfigProps> = ({ onConfigComplete }) => {
             >
               <option value="mock">Mock (for testing)</option>
               <option value="google">Google (Gemini)</option>
-              <option value="anthropic">Anthropic (Claude)</option>
-              <option value="openai">OpenAI (GPT)</option>
+              <option value="anthropic">Anthropic (Not implemented)</option>
+              <option value="openai">OpenAI (Not implemented)</option>
             </select>
           </div>
 
