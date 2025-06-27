@@ -2,8 +2,8 @@ import './style/news.css';
 import Summary from './Summary';
 import Story from './Story';
 import RefreshButton from './RefreshButton';
-import { useEffect, useState } from 'react';
-import { apiService, NewsSummaryResponse, NewsSummaryRequest, NewsSummaryResponseItem, NewsSummaryStreamItem } from '../api';
+import { useState } from 'react';
+import { apiService, NewsSummaryRequest, NewsSummaryResponseItem, NewsSummaryStreamItem } from '../api';
 import { getSources } from '../databaselol/Sources';
 import { Source } from '../api';
 

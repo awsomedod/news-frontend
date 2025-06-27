@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import News from './components/News';
 import Sources from './components/Sources';
 import Config from './components/Config';
-import { LLMConfig } from './types';
-// import { LLMProvider } from './ai/LLMContext';
 
 /**
  * Main application component that manages the overall application state and layout.

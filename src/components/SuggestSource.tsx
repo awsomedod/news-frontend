@@ -1,11 +1,7 @@
 import './style/addSource.css';
 import { useState } from 'react';
-import axios from 'axios';
 import { apiService } from '../api';
 import { SuggestSourcesResponse } from '../api';
-// import { useLLMClient } from '../ai/useLLMClient';
-// import { suggestNewsSources } from '../ai/agent';
-// import { Sources } from '../ai/types';
 
 /**
  * Props interface for the SuggestSource component.
